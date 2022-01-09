@@ -3,7 +3,8 @@ The Database was not for countries it was just for customers, but i have built t
 
 ## How to run
 
-- You must install compser and Git to run the project
+- You must extract the mustExtract.zip file first
+- You must install composer and Git to run the project
 - write 'php artisan serve' command to run the project
 - Copy the url that will appear for you and past it in the browser
 
