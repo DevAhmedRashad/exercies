@@ -12,20 +12,13 @@ namespace App\Services;
 class Regex
 {
     public function PhoneRegex($phones){
-        //Regular expressions Patterns
-        $cameroon_regex = "/\(237\)\ ?[2368]\d{7,8}$/";
-        $ethiopia_regex = "/\(251\)\ ?[1-59]\d{8}$/";
-        $morocco_regex = "/\(212\)\ ?[5-9]\d{8}$/";
-        $mozambique_regex = "/\(258\)\ ?[28]\d{7,8}$/";
-        $uganda_regex = "/\(256\)\ ?\d{9}$/";
 
-        //mapping the country code with the country
-        $countries_code = [
-            "+237" => 'Cameron',
-            "+251" => 'Ethiopia',
-            "+212" => 'Morocco',
-            "+258" => 'Mozambique',
-            "+256" => 'Uganda'
+        $countries_array = [
+            ['country' => 'Cameron', 'country_code' => '+237', 'pattern' => '/\(237\)\ ?[2368]\d{7,8}$/'],
+            ['country' => 'Ethiopia', 'country_code' => '+251', 'pattern' =>  '/\(251\)\ ?[1-59]\d{8}$/'],
+            ['country' => 'Morocco', 'country_code' => '+212', 'pattern' =>  '/\(212\)\ ?[5-9]\d{8}$/'],
+            ['country' => 'Mozambique', 'country_code' => '+258', 'pattern' =>  '/\(258\)\ ?[28]\d{7,8}$/'],
+            ['country' => 'Uganda', 'country_code' => '+256', 'pattern' =>  '/\(256\)\ ?\d{9}$/'],
         ];
 
         //empty array to hold all the countries phone data
@@ -36,38 +29,32 @@ class Regex
             //default state
             $state = "NOK";
 
-            //Regex check
-            if(preg_match($cameroon_regex, $phone->phone)){
-                $state = "OK";
-            }elseif (preg_match($ethiopia_regex, $phone->phone)){
-                $state = "OK";
-            }elseif (preg_match($morocco_regex, $phone->phone)){
-                $state = "OK";
-            }elseif (preg_match($mozambique_regex, $phone->phone)){
-                $state = "OK";
-            }elseif (preg_match($uganda_regex, $phone->phone)){
-                $state = "OK";
+            foreach ($countries_array as $country){
+
+                if(preg_match($country['pattern'], $phone->phone)){
+                    $state = "OK";
+                }
+
+                //get the phone without the country code
+                $country_phone = preg_replace("/\(\d{3}\)|\s|/", "", $phone->phone);
+
+                //get the country code from the whole phone
+                $country_code = "+" . substr($phone->phone,1,3);
+
+                //check if phone country code equal the actual country code the the array will created and added to the main array
+                if($country_code == $country['country_code']){
+                    $countryPhoneArray = [
+                        'country' => $country['country'],
+                        'state' => $state,
+                        'country_code' => $country['country_code'],
+                        'phone' => $country_phone
+                    ];
+
+                    //adding the created array to the main array
+                    array_push($countriesPhonesArray, $countryPhoneArray);
+                }
+
             }
-
-            //get the country code from the whole phone
-            $country_code = "+" . substr($phone->phone,1,3);
-
-            //get the country from the mapping array for countries with country code
-            $country = $countries_code[$country_code];
-
-            //get the phone without the country code
-            $country_phone = preg_replace("/\(\d{3}\)|\s|/", "", $phone->phone);
-
-            //the created array for each phone
-            $countryPhoneArray = [
-                'country' => $country,
-                'state' => $state,
-                'country_code' => $country_code,
-                'phone' => $country_phone
-            ];
-
-            //push the created array to be added to the main array
-            array_push($countriesPhonesArray, $countryPhoneArray);
         }
 
         return $countriesPhonesArray;
