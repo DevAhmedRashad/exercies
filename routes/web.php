@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//List all phones number
+//List all phone numbers
 Route::get('/', [
-    'uses' => 'PhoneController@allPhones'
+    'uses' => 'PhoneController@PhonesCountries'
+]);
+
+//Filter the phone numbers
+Route::get('filter', [
+    'uses' => 'PhoneController@filterPhones',
+    'as' => 'filter'
 ]);

@@ -10,22 +10,44 @@ namespace App\Services;
 
 
 use App\ServicesDatabase\PhonesDB;
-use Illuminate\Support\Facades\DB;
 
 class PhoneServices
 {
-    /** @var PhoneDB */
     protected $PhoneDB;
+    protected $Regex;
+    protected $Paginate;
 
-    public function __construct(PhonesDB $PhoneDB)
+    public function __construct(PhonesDB $PhoneDB, Regex $Regex, Paginate $Paginate)
     {
         $this->PhoneDB = $PhoneDB;
+        $this->Regex = $Regex;
+        $this->Paginate = $Paginate;
     }
 
-    public function listAllPhones()
-    {
+    //get all data from database and pass it to regex rules and return it
+    protected function getData(){
         //Get all phones from DB
         $phones = $this->PhoneDB->listAllPhones();
-        return $phones;
+        return $this->Regex->PhoneRegex($phones);
+    }
+
+    //list all phones data
+    public function listAllPhonesData()
+    {
+        return $this->Paginate->paginate($this->getData());
+    }
+
+    //list all countries only for the drop down countries input
+    public function listAllCountries()
+    {
+        $allData = $this->getData();
+
+        $countries = [];
+        foreach ($allData as $country){
+            if(!in_array($country['country'], $countries)){
+                array_push($countries, $country['country']);
+            }
+        }
+        return $countries;
     }
 }

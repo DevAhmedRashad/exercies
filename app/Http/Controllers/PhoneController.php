@@ -2,27 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PhoneFilterServices;
 use Illuminate\Http\Request;
 use App\Services\PhoneServices;
 
 class PhoneController extends Controller
 {
-    /** @var PhoneServices */
-    protected $PhoneServices;
 
-    public function __construct(PhoneServices $PhoneServices)
+    protected $PhoneServices;
+    protected $PhoneFilterServices;
+
+    public function __construct(PhoneServices $PhoneServices, PhoneFilterServices $PhoneFilterServices)
     {
         $this->PhoneServices = $PhoneServices;
+        $this->PhoneFilterServices = $PhoneFilterServices;
     }
 
     /**
-     * Handle the incoming request to list all phones.
+     * Handle the incoming requests to get the phones and countries to return them to the view
      *
-     * @return array to view
+     * @return array
      */
-    public function allPhones()
+    public function PhonesCountries()
     {
-        $phones = $this->PhoneServices->listAllPhones();
-        return view('phones.phones', ['phones' => $phones]);
+        $phones = $this->PhoneServices->listAllPhonesData();
+        $countries = $this->PhoneServices->listAllCountries();
+        return view('phones.phones', ['phones' => $phones, 'countries' => $countries]);
+    }
+
+    /**
+     * Handle the incoming requests to get the phones and countries to return them to the view
+     *
+     * @return array
+     */
+    public function filterPhones(Request $request)
+    {
+        $phones = $this->PhoneFilterServices->listFilteredPhonesData($request);
+        $countries = $this->PhoneServices->listAllCountries();
+        return view('phones.phones', ['phones' => $phones, 'countries' => $countries]);
     }
 }

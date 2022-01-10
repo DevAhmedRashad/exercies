@@ -1,3 +1,19 @@
-th{
+table{
+    padding: 20px;
+    border: none;
+}
+
+th, td{
     text-align: left;
+    padding: 10px;
+}
+
+ul li{
+    list-style-type: none;
+    float: left;
+    padding: 10px;
+}
+
+h2, form{
+    padding-left: 20px;
 }

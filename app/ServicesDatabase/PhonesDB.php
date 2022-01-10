@@ -17,6 +17,7 @@ class PhonesDB
     public function listAllPhones()
     {
         //Get all phones from DB
-        return DB::table('customer')->get();
+        return DB::table('customer')->select('phone')->get();
     }
+
 }
