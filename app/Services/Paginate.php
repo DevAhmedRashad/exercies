@@ -13,6 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Paginate
 {
+    //pagination with 15 item per page
     public function paginate($items, $perPage = 15, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

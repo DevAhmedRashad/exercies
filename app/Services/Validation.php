@@ -13,6 +13,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 class Validation
 {
     use ValidatesRequests;
+
+    //validate the country and state inputs by laravel validation
     public function FilteredPhonesValidation($request)
     {
         $this->validate($request,[

@@ -31,7 +31,7 @@ class PhoneController extends Controller
     }
 
     /**
-     * Handle the incoming requests to get the phones and countries to return them to the view
+     * Handle the incoming requests to get the phones and countries filtered and return them to the view
      *
      * @return array
      */
